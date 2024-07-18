@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post to Reddit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Post to Reddit</h1>
+        <form id="redditForm">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="threadText">Thread Text</label>
+                <textarea id="threadText" name="threadText" rows="5" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="flair">Flair</label>
+                <select id="flair" name="flair" required>
+                    <option value="b5ae75ae-0063-11ef-be6d-ca04a69b08bd">مشاركة مصادر مفيدة</option>
+                    <option value="2c778cbc-0063-11ef-9ff6-c641b30bdd14">سؤال</option>
+                    <option value="56245d60-0063-11ef-a333-ce407151c8d0">طلب نصيحة</option>
+                    <option value="a8dd26b4-1566-11ef-80fa-5aeebab228b2">ردود جادة فقط | ممنوع الهزار</option>
+                    <option value="3c3dd7b4-0063-11ef-a9d4-0624632b8a6c">رأي</option>
+                    <option value="7696042c-0063-11ef-a536-76cd8bbfe373">فضفضة من الكبت</option>
+                    <option value="1b6dbea0-0063-11ef-8ec3-1a3ba2aa9eb7">دردشة</option>
+                    <option value="ccd8550a-155e-11ef-afbc-eee287c1d125">عاهات و تقاليد</option>
+                    <option value="9e5bfa16-0063-11ef-8894-deb284ff3fda">ميمز أو نكت</option>
+                    <option value="36c280e4-1a46-11ef-972d-ca47d8eb0dbb">Anime</option>
+                    <option value="35203b16-1567-11ef-bedd-0a9d770a2eb8">TW | تعدي جسدي</option>
+                    <option value="33099b00-1568-11ef-b7ce-928914854072">TW | إنتحار</option>
+                    <option value="db025a6e-1567-11ef-a2c7-4e4e30e538a5">TW | تنمر</option>
+                    <option value="ad0be86e-1567-11ef-9c60-ba2956f459c1">TW | إضطهاد</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Post Thread</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('redditForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const threadText = document.getElementById('threadText').value;
+            const flair = document.getElementById('flair').value;
+            fetch('/post_to_reddit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, threadText, flair })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Thread posted successfully!');
+                } else {
+                    alert('Failed to post thread.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while posting the thread.');
+            });
+        });
+    </script>
+</body>
+
+
